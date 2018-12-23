@@ -1,0 +1,55 @@
+body * {
+    box-sizing: border-box
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.flexWrapper {
+    margin: 0 auto;
+    width: 75%;
+    display: flex;
+    justify-content: space-around;
+}
+
+fieldset {
+    border: none;
+}
+
+.box {
+    flex: 0 0 1;
+    text-align: center;
+    width: 33.33%;
+    border: 1px solid black;
+    margin: 5px;
+    border-radius: 10px;
+    padding-bottom: 5px;
+}
+
+li, ul {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+.total {
+    margin: 0 0 10px 0;
+}
+
+.start-next {
+    display: block;
+    text-align: center;
+    margin: 20px 0px;
+}
+
+.start {
+    height: 50px;
+    width: 100px;
+}
+
+.money {
+    border-top: 1px solid black;
+    padding-top: 5px;
+    margin: 10px 0 0 0;
+}
