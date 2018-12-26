@@ -9,7 +9,11 @@ let purchaseItems = [{
         numSelected: 0 
     }]
 
-total = 0
+total = 0;
+
+money = 15;
+
+inventory = [];
 
 function updatePurchaseMenu () {
     let purchaseHTML = ''
@@ -26,6 +30,7 @@ function practiceGame () {
     updatePurchaseMenu ();
     clickPlus ();
     clickMinus ();
+    submitPurchase ();
     console.log('practiceGame');
 }
 
@@ -74,11 +79,11 @@ function subOneToPurchaseChoice (itemIndex) {
         if (i === itemIndex) {
             if (purchaseItems[i].numSelected !== 0) {
                 purchaseItems[i].numSelected -= 1;
+                changeTotal (itemIndex);
             }
         }
     }
     updatePurchaseMenu ();
-    changeTotal (itemIndex);
     console.log('subOneToPurchaseChoice');
 }
 
@@ -96,20 +101,84 @@ function changeTotal (itemIndex, addOrSubtract = 'subtract') {
     updatePurchaseMenu ();
 }
 
-function NewTotalCost () {
-
-}
-
 function submitPurchase () {
-
+    $('form').submit(function (event) {
+        event.preventDefault;
+        if (total <= money) {
+            money -= total;
+            for (let i in purchaseItems) {
+                if (purchaseItems[i].numSelected > 0) {
+                    let numberToBuy = purchaseItems[i].numSelected
+                    for (let j=1; j<= numberToBuy; j++) {
+                        newInventoryItem (purchaseItems[i].name)
+                    }
+                }
+            }
+        }
+        updateInventory ();
+        resetNumSelect ();
+    return false;
+    })
 }
 
-function payForItems () {
-
+function resetNumSelect () {
+    for (let i in purchaseItems) {
+        purchaseItems[i].numSelected = 0;
+        total = 0;
+        updatePurchaseMenu ();
+    }
 }
 
-function addToInventory () {
+function newInventoryItem (itemName, itemCondition = 10) {
+    inventory.push(
+        {name: itemName,
+        condition: itemCondition}
+    )
+    console.log(inventory);
+}
 
+function updateInventory () {
+    numberOfEachItem = countInventoryItems ();
+    printInventory (numberOfEachItem);
+    console.log('updateinventery');
+}
+
+function countInventoryItems () {
+    let numberofEachItemArray = [];
+    inventory.sort(function(a, b){
+        var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+            return -1 
+        if (nameA > nameB)
+            return 1
+        return 0 //default return value (no sorting)
+    })
+    let currentItem = null;
+    let count = 0
+    for (let i in inventory) {
+        if (inventory[i].name !== currentItem) {
+            if (count>0) {
+                numberofEachItemArray.push({name: currentItem,
+                                            number: count});
+            }
+            currentItem = inventory[i].name;
+            count = 1;
+        }
+        else {
+            count++
+        }
+    }
+    numberofEachItemArray.push({name: currentItem,
+        number: count});
+    return numberofEachItemArray;
+}
+
+function printInventory (numberOfEachItem) {
+    inventoryHTML ='';
+    numberOfEachItem.forEach(item => {
+        inventoryHTML += `<li>${item.name}: ${item.number}</li>`;
+    })
+    $('.inventory').html(`${inventoryHTML}`)
 }
 
  
